@@ -3,11 +3,15 @@ import { Request, Response } from 'express';
 let history: string[] = [];
 
 export const evaluateExpression = (req: Request, res: Response) => {
-    const { expression } = req.body;
+    let { expression } = req.body;
 
     try {
         if (/[^0-9+\-*/().]/.test(expression)) {
             throw new Error('На данный момент уравнение не поддерживаются');
+        }
+
+        if(/^[+\-*/]/.test(expression)) {
+            expression = '0' + expression;
         }
 
         const result = eval(expression);
@@ -21,6 +25,7 @@ export const evaluateExpression = (req: Request, res: Response) => {
         res.status(200).json({ result: output, history });
 
     } catch (error) {
-        res.status(400).json({ error: error, history});
+        // @ts-ignore
+        res.status(400).json({ error: error.message, history});
     }
 };

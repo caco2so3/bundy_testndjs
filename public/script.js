@@ -18,3 +18,9 @@ function submitExpression() {
         })
         .catch(error => console.error('Error:', error));
 }
+document.getElementById('expression').addEventListener('keydown', function (event)
+{
+    if (event.key == 'Enter'){
+        submitExpression();
+    }
+})
